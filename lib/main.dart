@@ -38,9 +38,9 @@ class MyApp extends StatelessWidget {
               RouteSingleton.instance.currentIndexNotifier.value =
                   newValue; //Update BottomNavigationBar current index
               RouteSingleton.instance.pageController.animateToPage(newValue,
-                  duration: Duration(milliseconds: 400),
+                  duration: Duration(milliseconds: 200),
                   curve: Curves
-                      .linear); //Tell PageView's pageController to go to appropiate page
+                      .easeOutExpo); //Tell PageView's pageController to go to appropiate page
             },
           ),
         ),

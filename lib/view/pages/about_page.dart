@@ -10,6 +10,16 @@ class AboutPage extends StatefulWidget {
 class _HomePageState extends State<AboutPage> {
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text("About"));
+    return SizedBox.expand(
+      child: ColoredBox(
+        color: Color.fromARGB(255, 51, 180, 255),
+        child: Center(
+          child: Text(
+            "About",
+            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+          ),
+        ),
+      ),
+    );
   }
 }
