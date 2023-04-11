@@ -12,8 +12,24 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  //This should go in the viewModel
   final MovieRepository _movieRepository = MovieDataImpl(MovieRemoteImpl());
+
   late List<Movie> listOfMovies;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _movieRepository.getMovies().then(
+      (value) {
+        listOfMovies = value;
+        print("debug");
+      },
+    ).catchError((e) {
+      //Handle error.
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,18 +43,8 @@ class _HomePageState extends State<HomePage> {
                 "Home",
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  _movieRepository.getMovies().then(
-                    (value) {
-                      listOfMovies = value;
-                      print("debug");
-                    },
-                  ).catchError((e) {
-                    //Handle error.
-                  });
-                },
-                child: const Text("Request"),
+              ListView(
+                children: [...listOfMovies.map((e) => Text(e.imdbID)).toList()],
               )
             ],
           ),
