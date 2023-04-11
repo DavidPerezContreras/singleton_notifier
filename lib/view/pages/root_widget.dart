@@ -12,11 +12,11 @@ class RootWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: PageView(
-        children: [HomePage(), AboutPage()],
         onPageChanged: (newValue) {
           RouteSingleton.instance.currentIndexNotifier.value = newValue;
         },
         controller: RouteSingleton.instance.pageController,
+        children: const [HomePage(), AboutPage()],
       ),
       appBar: AppBar(
         title: const Text("Singleton Notifier"),
@@ -33,7 +33,7 @@ class RootWidget extends StatelessWidget {
             RouteSingleton.instance.currentIndexNotifier.value =
                 newValue; //Update BottomNavigationBar current index
             RouteSingleton.instance.pageController.animateToPage(newValue,
-                duration: Duration(milliseconds: 200),
+                duration: const Duration(milliseconds: 200),
                 curve: Curves
                     .easeOutExpo); //Tell PageView's pageController to go to appropiate page
           },

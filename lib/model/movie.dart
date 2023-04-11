@@ -12,16 +12,16 @@ class Movie {
 
   Movie.fromJson(Map<String, dynamic> json)
       : imdbID = json["imdbID"],
-        title = json["title"],
-        year = json["year"],
-        poster = json["poster"];
+        title = json["Title"],
+        year = json["Year"],
+        poster = json["Poster"];
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['imdbID'] = this.imdbID;
-    data['Title'] = this.title;
-    data['Year'] = this.year;
-    data['Poster'] = this.poster;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['imdbID'] = imdbID;
+    data['Title'] = title;
+    data['Year'] = year;
+    data['Poster'] = poster;
     return data;
   }
 }

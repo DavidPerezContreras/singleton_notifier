@@ -16,7 +16,7 @@ class _LoginWidgetState extends State<LoginWidget> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text("Login"),
+          title: const Text("Login"),
         ),
         body: LoginForm(
           key: widget.key,
@@ -25,7 +25,7 @@ class _LoginWidgetState extends State<LoginWidget> {
 }
 
 class LoginForm extends StatefulWidget {
-  LoginForm({
+  const LoginForm({
     super.key,
   });
 
@@ -56,22 +56,22 @@ class _LoginFormState extends State<LoginForm> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 0),
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 0),
             width: screenWidth * 0.8,
             child: TextField(
               controller: usernameTextEditingController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Usuario o E-mail',
                   hintText: 'Usuario o E-mail'),
             ),
           ),
-          Container(
+          SizedBox(
             width: screenWidth * 0.8,
             child: TextField(
               controller: passwordTextEditingController,
               obscureText: true,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Contraseña',
                   hintText: 'Contraseña'),
@@ -79,28 +79,33 @@ class _LoginFormState extends State<LoginForm> {
           ),
           Container(
               width: screenWidth * 2 / 3,
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 0),
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 0),
               child: SizedBox(
                 height: 50,
                 child: ElevatedButton(
                   key: widget.key,
-                  child: Text(
+                  child: const Text(
                     "Login",
                     style: TextStyle(fontSize: 20),
                   ),
-                  onPressed: () async {
+                  onPressed: () {
+                    Future.delayed(const Duration(seconds: 1)).then((value) {
+                      User.current = User(username: "david");
+
+                      print(User.current!.username);
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (BuildContext context) => const RootWidget(),
+                        ),
+                      );
+                    });
+/*
                     User.current =
-                        await Future.delayed(Duration(seconds: 2), () {
+                        await Future.delayed(const Duration(seconds: 1), () {
                       return User(username: "david");
                     });
-
-                    print(User.current!.username);
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute<void>(
-                        builder: (BuildContext context) => const RootWidget(),
-                      ),
-                    );
+                    */
                   },
                 ),
               )),
