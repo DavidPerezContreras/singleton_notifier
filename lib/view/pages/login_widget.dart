@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:singleton_notifier/view/model/user.dart';
+import 'package:singleton_notifier/model/user.dart';
 import 'package:singleton_notifier/view/pages/root_widget.dart';
 
 class LoginWidget extends StatefulWidget {
