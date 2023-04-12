@@ -51,7 +51,35 @@ class _HomePageState extends State<HomePage>
                 onRefresh: () {
                   return _homeViewModel.fetchMovies();
                 },
-                child: ListView(
+                child: ListView.builder(
+                  itemCount: listOfMovies.length,
+                  itemBuilder: (context, index) {
+
+                  Movie movie= listOfMovies[index];
+
+                  return Stack(children: [
+                              Card(
+                                child: ListTile(
+                                  leading: Image.network(movie.poster),
+                                  title: Text(movie.title),
+                                  trailing: Text(movie.year),
+                                  onTap: () {
+                                    RouteSingleton.instance.pageController
+                                        .animateToPage(2,
+                                            duration: const Duration(
+                                                milliseconds: 900),
+                                            curve: Curves.easeOutExpo);
+                                  },
+                                ),
+                              ),
+                              const Divider()
+                            ]);
+                },)
+                
+                
+                
+                /*
+                ListView(
                   children: [
                     ...listOfMovies
                         .map((e) => Stack(children: [
@@ -74,6 +102,9 @@ class _HomePageState extends State<HomePage>
                         .toList()
                   ],
                 ),
+*/
+
+                
               ),
             )
           ],
