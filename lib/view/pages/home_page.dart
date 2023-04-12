@@ -3,6 +3,7 @@ import 'package:singleton_notifier/data/movie_data_impl.dart';
 import 'package:singleton_notifier/data/movies/remote/movie_remote_impl.dart';
 import 'package:singleton_notifier/model/movie.dart';
 import 'package:singleton_notifier/view/common/error/resource_state.dart';
+import 'package:singleton_notifier/view/di/singleton.dart';
 import 'package:singleton_notifier/view/viewmodel/home_viewmodel.dart';
 
 class HomePage extends StatefulWidget {
@@ -13,7 +14,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage>
-    {
+    with AutomaticKeepAliveClientMixin {
   //This should go in the viewModel
   final HomeViewModel _homeViewModel =
       HomeViewModel(r: MovieDataImpl(MovieRemoteImpl()));
@@ -24,7 +25,6 @@ class _HomePageState extends State<HomePage>
   void initState() {
     super.initState();
     print("home initState");
-
 
     _homeViewModel.movieStreamController.stream.listen((resourceState) {
       if (resourceState.status == Status.COMPLETED) {
@@ -40,36 +40,49 @@ class _HomePageState extends State<HomePage>
   @override
   Widget build(BuildContext context) {
     return SizedBox.expand(
-      child: ColoredBox(
-        color: const Color.fromARGB(255, 159, 255, 150),
-        child: Center(
-          child: Column(
-            children: [
-              const Text(
-                "Home",
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-              ),
-              Flexible(
-                child: RefreshIndicator(
-                  onRefresh: () {
-                    return _homeViewModel.fetchMovies();
-                  },
-                  child: ListView(
-                    children: [
-                      ...listOfMovies
-                          .map((e) => ListTile(
-                                leading: Image.network(e.poster),
-                              ))
-                          .toList()
-                    ],
-                  ),
+      child: Container(
+        //color: const Color.fromARGB(255, 159, 255, 150),
+        alignment: Alignment.center,
+        child: Column(
+          children: [
+            
+            Flexible( //Esto es para que no salte el error 'Vertical viewport was given unbounded height' 
+              child: RefreshIndicator(
+                onRefresh: () {
+                  return _homeViewModel.fetchMovies();
+                },
+                child: ListView(
+                  children: [
+                    ...listOfMovies
+                        .map((e) => Stack(children: [
+                              Card(
+                                child: ListTile(
+                                  leading: Image.network(e.poster),
+                                  title: Text(e.title),
+                                  trailing: Text(e.year),
+                                  onTap: () {
+                                    RouteSingleton.instance.pageController
+                                        .animateToPage(2,
+                                            duration: const Duration(
+                                                milliseconds: 900),
+                                            curve: Curves.easeOutExpo);
+                                  },
+                                ),
+                              ),
+                              const Divider()
+                            ]))
+                        .toList()
+                  ],
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );
   }
 
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
