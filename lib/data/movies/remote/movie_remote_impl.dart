@@ -1,11 +1,12 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:singleton_notifier/data/remote/network_endpoints.dart';
 import 'package:singleton_notifier/model/movie.dart';
 
 class MovieRemoteImpl {
   Future<List<Movie>> getMovies() async {
-    final response = await http.get(Uri.parse('http://10.4.2.43:3000/api'));
+    final response = await http.get(Uri.parse(NetworkEndpoints.movies));
 
     if (response.statusCode == 200) {
       final List<dynamic> jsonList = json.decode(response.body);

@@ -1,4 +1,4 @@
-import 'package:singleton_notifier/view/error/error_bundle.dart';
+import 'package:singleton_notifier/view/common/error/error_bundle.dart';
 
 enum Status { IDLE, LOADING, COMPLETED, ERROR }
 

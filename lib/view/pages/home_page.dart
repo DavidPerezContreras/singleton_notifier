@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:singleton_notifier/data/movie_data_impl.dart';
 import 'package:singleton_notifier/data/movies/remote/movie_remote_impl.dart';
-import 'package:singleton_notifier/domain/movie_repository.dart';
 import 'package:singleton_notifier/model/movie.dart';
+import 'package:singleton_notifier/view/common/error/resource_state.dart';
+import 'package:singleton_notifier/view/viewmodel/home_viewmodel.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,24 +12,29 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    {
   //This should go in the viewModel
-  final MovieRepository _movieRepository = MovieDataImpl(MovieRemoteImpl());
+  final HomeViewModel _homeViewModel =
+      HomeViewModel(r: MovieDataImpl(MovieRemoteImpl()));
 
-  late List<Movie> listOfMovies;
+  List<Movie> listOfMovies = [];
 
   @override
   void initState() {
     super.initState();
+    print("home initState");
 
-    _movieRepository.getMovies().then(
-      (value) {
-        listOfMovies = value;
-        print("debug");
-      },
-    ).catchError((e) {
-      //Handle error.
+
+    _homeViewModel.movieStreamController.stream.listen((resourceState) {
+      if (resourceState.status == Status.COMPLETED) {
+        setState(() {
+          listOfMovies = resourceState.data;
+        });
+      }
     });
+
+    _homeViewModel.fetchMovies();
   }
 
   @override
@@ -43,8 +49,21 @@ class _HomePageState extends State<HomePage> {
                 "Home",
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
-              ListView(
-                children: [...listOfMovies.map((e) => Text(e.imdbID)).toList()],
+              Flexible(
+                child: RefreshIndicator(
+                  onRefresh: () {
+                    return _homeViewModel.fetchMovies();
+                  },
+                  child: ListView(
+                    children: [
+                      ...listOfMovies
+                          .map((e) => ListTile(
+                                leading: Image.network(e.poster),
+                              ))
+                          .toList()
+                    ],
+                  ),
+                ),
               )
             ],
           ),
@@ -52,4 +71,5 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
 }

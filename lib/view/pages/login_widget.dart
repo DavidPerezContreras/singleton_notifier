@@ -89,7 +89,7 @@ class _LoginFormState extends State<LoginForm> {
                     style: TextStyle(fontSize: 20),
                   ),
                   onPressed: () {
-                    Future.delayed(const Duration(seconds: 1)).then((value) {
+                    Future.delayed(const Duration(milliseconds: 300)).then((value) {
                       User.current = User(username: "david");
 
                       print(User.current!.username);
